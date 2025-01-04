@@ -5,7 +5,7 @@ const router = express.Router();
 
 // Formulário de Solicitação
 router.get('/', (req, res) => {
-    res.render('contactForm');
+    res.render('welcome');
 });
 
 // Submissão de Solicitação

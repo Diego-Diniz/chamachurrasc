@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const sequelize = require('./config/database');
 const contactRoutes = require('./routes/contactRoutes');
+const userRoutes = require('./routes/userRoutes');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -10,11 +12,13 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Middleware para capturar dados do formulário
+// Middlewares
 app.use(express.json());
+app.use(cookieParser());
 
 // Rotas
 app.use('/', contactRoutes);
+app.use('/api/users', userRoutes);
 
 // Nova rota para exibir a página final com as informações do formulário
 app.post('/review', (req, res) => {

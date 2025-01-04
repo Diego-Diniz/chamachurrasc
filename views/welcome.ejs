@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -188,7 +188,7 @@
       <div class="header-right">
         <a class="active" href="#home">Página Inicial</a>
         <!-- <a href="#contact">Contato</a>
-        <a href="#about">Sobre nós</a> -->
+        <a href="#about">Sobre nós</a> 
       </div>
     </div>
     <div class="container mt-5">
@@ -466,8 +466,53 @@
           >
             Enviar Solicitação
           </button>
-        </div> -->
+        </div> 
       </form>
     </div>
   </body>
-</html>
+</html> -->
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head') %>
+  <body>
+    <%- include('partials/header') %>
+    <div class="container mt-5">
+      <img src="/images/logo.png" alt="Logo ChamaChurras" class="brand-logo" />
+      <h1>Olá, bem vindo ao ChamaChurras.com!</h1>
+      <h4>Em breve, aqui você irá encontrar o assador certo para o seu churrasco!</h4>
+      <div class="contact-info">
+        <h2>Entre em contato conosco para mais informações:</h2>
+        <p><strong>WhatsApp:</strong> <a href="https://wa.me/5541985028480" target="_blank">+5541985028480</a></p>
+        <p><strong>Email:</strong> <a href="mailto:contato@chamachurras.com">contato@chamachurras.com</a></p>
+      </div>
+    </div>
+    <%- include('partials/footer') %>
+  </body>
+</html> -->
+
+<%- include('partials/head') %>
+
+<%- include('partials/header') %>
+
+<div class="container text-center mt-5">
+  <div class="welcome-content">
+    <!-- Logo -->
+    <img src="/images/logo.png" alt="ChamaChurras Logo" class="brand-logo mb-4" />
+
+    <!-- Frase de Boas-Vindas -->
+    <h1 class="welcome-title">Bem-vindo ao ChamaChurras!</h1>
+    <p class="welcome-subtitle mt-3">
+      "O lugar perfeito para encontrar o assador ideal para seu churrasco."
+    </p>
+
+    <!-- Botões de Ação -->
+    <div class="mt-4">
+      <a href="/register" class="btn btn-success btn-lg mx-2">Cadastre-se</a>
+      <a href="/login" class="btn btn-outline-success btn-lg mx-2">Faça Login</a>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
+
