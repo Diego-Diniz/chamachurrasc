@@ -64,7 +64,7 @@ const User = sequelize.define('User', {
         type: DataTypes.DATE,
         allowNull: true,
     },
-    status: {
+    isActive: {
         type: DataTypes.ENUM('ativo', 'inativo'),
         allowNull: false,
         defaultValue: 'ativo',

@@ -1,7 +1,15 @@
+<%- include('partials/head') %>
 <%- include('partials/header', { title: 'Cadastro de Usuário' }) %>
 
 <div class="container mt-5">
   <h1 class="form-title">Cadastro de Usuário</h1>
+
+  <% if (error) { %>
+    <div class="alert alert-danger" role="alert">
+      <%= error %>
+    </div>
+  <% } %>
+
   <form action="/register" method="POST">
     <div class="mb-3">
       <label for="name" class="form-label">Nome Completo</label>

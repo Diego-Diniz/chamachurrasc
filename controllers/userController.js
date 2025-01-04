@@ -10,7 +10,7 @@ exports.register = async (req, res) => {
     try {
         const userExists = await User.findOne({ where: { email } });
         if (userExists) {
-            return res.status(400).json({ error: 'Email já cadastrado!' });
+            return res.render('register', { error: 'Email já cadastrado!' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -24,14 +24,19 @@ exports.register = async (req, res) => {
             profile_picture,
         });
 
-        res.status(201).json({ message: 'Usuário registrado com sucesso!', user: newUser });
+        res.render('thankYou', { user: newUser });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Erro ao registrar o usuário' });
+        res.render('register', { error: 'Erro ao registrar o usuário' });
     }
 };
 
+
 // Login de usuário
+exports.showLoginPage = (req, res) => {
+    res.render('login', { error: null });
+};
+
 exports.login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -39,26 +44,24 @@ exports.login = async (req, res) => {
         const user = await User.findOne({ where: { email } });
 
         if (!user) {
-            return res.status(404).json({ error: 'Usuário não encontrado' });
+            return res.render('login', { error: 'Usuário não encontrado' });
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
-            return res.status(401).json({ error: 'Senha incorreta' });
+            return res.render('login', { error: 'Senha incorreta' });
         }
 
         const token = jwt.sign({ id: user.id, user_type: user.user_type }, process.env.JWT_SECRET, {
             expiresIn: '1h',
         });
 
-        await user.update({ last_login: new Date() });
-
         res.cookie('token', token, { httpOnly: true });
-        res.status(200).json({ message: 'Login bem-sucedido!', token });
+        res.redirect('/dashboard'); // Redireciona após login bem-sucedido
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Erro ao fazer login' });
+        res.render('login', { error: 'Erro ao fazer login' });
     }
 };
 
@@ -96,7 +99,7 @@ exports.forgotPassword = async (req, res) => {
         const user = await User.findOne({ where: { email } });
 
         if (!user) {
-            return res.status(404).json({ error: 'Usuário não encontrado' });
+            return res.render('forgotPassword', { error: 'Usuário não encontrado' });
         }
 
         const resetToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -106,11 +109,10 @@ exports.forgotPassword = async (req, res) => {
             reset_token_expiry: new Date(Date.now() + 3600000), // 1 hora de validade
         });
 
-        // Aqui você enviaria o token por email
-        res.status(200).json({ message: 'Token de redefinição gerado', resetToken });
+        res.render('forgotPassword', { error: 'Um link de redefinição foi enviado ao seu e-mail.' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Erro ao solicitar recuperação de senha' });
+        res.render('forgotPassword', { error: 'Erro ao processar solicitação' });
     }
 };
 

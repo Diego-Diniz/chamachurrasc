@@ -4,6 +4,7 @@ const sequelize = require('./config/database');
 const contactRoutes = require('./routes/contactRoutes');
 const userRoutes = require('./routes/userRoutes');
 const cookieParser = require('cookie-parser');
+require('dotenv').config();
 
 const app = express();
 
@@ -18,7 +19,7 @@ app.use(cookieParser());
 
 // Rotas
 app.use('/', contactRoutes);
-app.use('/api/users', userRoutes);
+app.use('/', userRoutes);
 
 // Nova rota para exibir a página final com as informações do formulário
 app.post('/review', (req, res) => {
