@@ -24,7 +24,15 @@ exports.register = async (req, res) => {
             profile_picture,
         });
 
-        res.render('thankYou', { user: newUser });
+        // Criação do token JWT
+        const token = jwt.sign({ id: newUser.id, user_type: newUser.user_type }, process.env.JWT_SECRET, {
+            expiresIn: '1h',
+        });
+
+        // Define o cookie com o token e redireciona para o dashboard
+        res.cookie('token', token, { httpOnly: true });
+        res.redirect('/dashboard');
+        
     } catch (error) {
         console.error(error);
         res.render('register', { error: 'Erro ao registrar o usuário' });
