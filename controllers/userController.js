@@ -2,6 +2,7 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
+const enviarEmail = require('../services/emailService');
 
 // Registro de novo usuário
 exports.register = async (req, res) => {
@@ -14,6 +15,7 @@ exports.register = async (req, res) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
+        const confirmationCode = Math.floor(100000 + Math.random() * 900000); // Gera código de 6 dígitos
 
         const newUser = await User.create({
             name,
@@ -22,17 +24,21 @@ exports.register = async (req, res) => {
             phone,
             zip_code,
             profile_picture,
+            confirmation_code: confirmationCode
         });
 
-        // Criação do token JWT
-        const token = jwt.sign({ id: newUser.id, user_type: newUser.user_type }, process.env.JWT_SECRET, {
-            expiresIn: '1h',
-        });
+        // Enviar o e-mail com o código
+        await enviarEmail(
+            email,
+            'Confirme seu cadastro - ChamaChurras',
+            name,
+            confirmationCode
+        );
 
-        // Define o cookie com o token e redireciona para o dashboard
-        res.cookie('token', token, { httpOnly: true });
-        res.redirect('/dashboard');
-        
+        res.render('thankYou', {
+            message: 'Cadastro realizado. Verifique seu e-mail!',
+            user: newUser
+        });
     } catch (error) {
         console.error(error);
         res.render('register', { error: 'Erro ao registrar o usuário' });

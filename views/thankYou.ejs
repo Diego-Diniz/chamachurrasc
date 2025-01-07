@@ -1,16 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <%- include('partials/head', { title: 'Obrigado pelo Cadastro!' }) %>
+  <%- include('partials/head', { title: 'Confirme seu Cadastro!' }) %>
   <body>
     <%- include('partials/header') %>
 
     <div class="container text-center mt-5">
       <div class="thank-you-content">
         <div class="emoji">🎉</div>
-        <h1 class="mt-3 text-success">Cadastro Concluído com Sucesso!</h1>
+        <h1 class="mt-3 text-success">Confirme seu Cadastro</h1>
         <p class="lead">Obrigado por se juntar ao <strong>ChamaChurras</strong>, <%= user.name %>!</p>
-        <p>A partir de agora, você poderá encontrar o assador perfeito para o seu churrasco!</p>
-        <a href="/" class="btn btn-primary mt-4">Voltar para Página Inicial</a>
+        <p>Para concluir, insira o código de confirmação que enviamos para seu e-mail.</p>
+
+        <form action="/confirm-email" method="POST" class="mt-4">
+          <input type="hidden" name="email" value="<%= user.email %>">
+          <div class="form-group">
+            <label for="code">Código de Confirmação</label>
+            <input type="text" class="form-control text-center" id="code" name="code" required placeholder="Digite o código">
+          </div>
+          <button type="submit" class="btn btn-success mt-3">Confirmar E-mail</button>
+        </form>
       </div>
     </div>
 
