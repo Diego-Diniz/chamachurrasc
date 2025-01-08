@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 
-// Rota para processar o código de confirmação
+// Rota para processar o código de confirmação (POST)
 router.post('/confirm-email', async (req, res) => {
     const { email, code } = req.body;
 
@@ -17,14 +17,15 @@ router.post('/confirm-email', async (req, res) => {
             });
         }
 
-        // Simulando o código armazenado no banco (em um cenário real, você o salva no DB)
+        // Validação do código de confirmação
         const expectedCode = user.confirmation_code;
 
-        // Valida o código
         if (code == expectedCode) {
             user.confirmed = true;
             await user.save();
-            res.render('confirmSuccess', { message: 'Cadastro confirmado com sucesso!' });
+            
+            // Redireciona para a rota de sucesso
+            res.redirect('/auth/confirmSuccess');
         } else {
             res.render('thankYou', {
                 error: 'Código inválido. Tente novamente.',
@@ -38,6 +39,11 @@ router.post('/confirm-email', async (req, res) => {
             user: { email }
         });
     }
+});
+
+// Rota para exibir a página de sucesso (GET)
+router.get('/confirmSuccess', (req, res) => {
+    res.render('confirmSuccess', { message: 'Cadastro confirmado com sucesso!' });
 });
 
 module.exports = router;
