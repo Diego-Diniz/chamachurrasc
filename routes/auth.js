@@ -53,4 +53,27 @@ router.get('/confirm-email', (req, res) => {
     res.render('confirmForm', { user: req.query });  // Renderiza o formulário
 });
 
+// Rota para confirmar o e-mail automaticamente
+router.get('/confirmar', async (req, res) => {
+    const { code } = req.query;
+
+    try {
+        const user = await User.findOne({ where: { confirmation_code: code } });
+
+        if (!user) {
+            return res.status(404).send('Código de confirmação inválido ou expirado.');
+        }
+
+        // Confirma o usuário
+        user.confirmed = true;
+        user.confirmation_code = null;  // Opcional: Remove o código após a confirmação
+        await user.save();
+
+        res.redirect('/auth/confirmSuccess');  // Redireciona para a página de sucesso
+    } catch (error) {
+        console.error('Erro ao confirmar e-mail:', error);
+        res.status(500).send('Erro interno ao confirmar e-mail.');
+    }
+});
+
 module.exports = router;
