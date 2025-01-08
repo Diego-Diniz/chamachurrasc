@@ -50,6 +50,10 @@ const User = sequelize.define('User', {
         type: DataTypes.DATE,
         allowNull: true,
     },
+    confirmation_code: {
+        type: DataTypes.STRING(6),  // Código de 6 dígitos, por exemplo
+        allowNull: true,
+    },
     created_at: {
         type: DataTypes.DATE,
         allowNull: false,

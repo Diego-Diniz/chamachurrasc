@@ -12,7 +12,7 @@ router.post('/confirm-email', async (req, res) => {
 
         if (!user) {
             console.log('Usuário não encontrado.');
-            return res.render('thankYou', {
+            return res.render('confirmEmail', {
                 error: 'Usuário não encontrado!',
                 user: { email }
             });
@@ -30,14 +30,14 @@ router.post('/confirm-email', async (req, res) => {
             return res.redirect('/auth/confirmSuccess');
         } else {
             console.log('Código inválido.');
-            return res.render('thankYou', {
+            return res.render('confirmEmail', {
                 error: 'Código inválido. Tente novamente.',
                 user
             });
         }
     } catch (error) {
         console.error('Erro ao processar:', error);
-        res.render('thankYou', {
+        res.render('confirmEmail', {
             error: 'Erro ao confirmar cadastro!',
             user: { email }
         });

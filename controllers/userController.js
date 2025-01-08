@@ -5,6 +5,7 @@ const { Op } = require('sequelize');
 const enviarEmail = require('../services/emailService');
 
 // Registro de novo usuário
+// Registro de novo usuário
 exports.register = async (req, res) => {
     const { name, email, password, phone, zip_code, profile_picture } = req.body;
 
@@ -35,9 +36,10 @@ exports.register = async (req, res) => {
             confirmationCode
         );
 
-        res.render('thankYou', {
+        res.render('confirmEmail', {
             message: 'Cadastro realizado. Verifique seu e-mail!',
-            user: newUser
+            user: newUser,
+            error: null // Adicione a variável error como null
         });
     } catch (error) {
         console.error(error);
