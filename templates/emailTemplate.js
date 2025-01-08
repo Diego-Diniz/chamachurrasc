@@ -69,7 +69,7 @@ module.exports = (name, code) => {
                 <p>Confirme seu e-mail utilizando o código abaixo:</p>
                 <div class="code">${code}</div>
                 <p>Ou clique no botão abaixo para confirmar automaticamente:</p>
-                <a href="https://chamachurras.com/confirmar?code=${code}" class="button">Confirmar E-mail</a>
+                <a href="https://chamachurras.com/auth/confirmar?code=${code}" class="button">Confirmar E-mail</a>
             </div>
             <div class="footer">
                 © 2024 ChamaChurras. Todos os direitos reservados. <br>
