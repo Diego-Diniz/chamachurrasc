@@ -32,7 +32,7 @@ router.post('/confirm-email', async (req, res) => {
             });
         }
     } catch (error) {
-        console.error(error);
+        console.error(error); 
         res.render('thankYou', {
             error: 'Erro ao confirmar cadastro!',
             user: { email }
