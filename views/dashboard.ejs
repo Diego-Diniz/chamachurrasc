@@ -1,29 +1,86 @@
 <%- include('partials/head') %>
-<%- include('partials/header', { title: 'Dashboard - Em Desenvolvimento' }) %>
+<%- include('partials/header', { title: 'Dashboard - ChamaChurras' }) %>
 
-<div class="container mt-5 text-center">
-  <h1 class="text-success">🚧 Plataforma em Construção 🚧</h1>
-  <p class="lead mt-4">Estamos trabalhando duro para trazer a melhor experiência de churrasco para você! 🍖🔥</p>
-  
-  <div class="row mt-5">
-    <div class="col-md-6 offset-md-3">
-      <div class="card shadow-sm p-4">
-        <h3>O que esperar?</h3>
-        <ul class="list-unstyled mt-3">
-          <li>🔍 Encontre assadores profissionais perto de você</li>
-          <li>📅 Agende eventos de churrasco com facilidade</li>
-          <li>💲 Faça o pagamento pela plataforma com praticidade e segurança</li>
-          <li>🌟 Avalie e compartilhe suas experiências</li>
-          
-        </ul>
-        <p class="mt-4">Enquanto isso, fique de olho! Logo mais teremos novidades. 🚀</p>
-        <hr>
-        <h4 class="mt-4">📞 Entre em contato conosco:</h4>
-        <p><strong>WhatsApp:</strong> <a href="https://wa.me/5541985028480" target="_blank">+55 41 98502-8480</a></p>
-        <p><strong>Email:</strong> <a href="mailto:contato@chamachurras.com">contato@chamachurras.com</a></p>
-        <a href="/" class="btn btn-primary mt-3">Voltar para Página Inicial</a>
+<div class="container mt-5">
+  <!-- Seção de Apresentação -->
+  <div class="text-center">
+    <h1 class="display-4 text-success">Transforme seu Evento com Churrasco Profissional! 🍖🔥</h1>
+    <p class="lead mt-3">Encontre os melhores churrasqueiros e garçons para tornar seu evento inesquecível.</p>
+    <a href="#how-it-works" class="btn btn-primary btn-lg mt-3">Saiba Mais</a>
+  </div>
+
+  <!-- Seção de Serviços -->
+  <div class="row mt-5 text-center justify-content-center">
+    
+    <!-- <div class="col-md-4">
+      <div class="card shadow-sm">
+        <img src="/images/chef.jpg" class="card-img-top" alt="Chefs">
+        <div class="card-body">
+          <h5 class="card-title">Chefs</h5>
+          <p class="card-text">Especialistas para transformar sua experiência culinária.</p>
+          <a href="/services/chefs" class="btn btn-outline-primary">Ver Mais</a>
+        </div>
+      </div>
+    </div> -->
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <img src="/images/churrasqueiro.png" class="card-img-top" alt="Assadores">
+        <div class="card-body">
+          <h5 class="card-title">Churrasqueiros</h5>
+          <p class="card-text">Os melhores assadores para garantir o sabor perfeito.</p>
+          <a href="/services/barbecue" class="btn btn-outline-primary">Ver Mais</a>
+        </div>
       </div>
     </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm">
+        <img src="/images/garcom.png" class="card-img-top" alt="Garçons">
+        <div class="card-body">
+          <h5 class="card-title">Garçons</h5>
+          <p class="card-text">Profissionais treinados para servir com excelência.</p>
+          <a href="/services/waiters" class="btn btn-outline-primary">Ver Mais</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Como Funciona -->
+  <div id="how-it-works" class="mt-5">
+    <h2 class="text-center text-primary">Como Funciona?</h2>
+    <div class="row mt-4 justify-content-center">
+      <!-- <div class="col-md-6">
+        <img src="/images/how-it-works.png" class="img-fluid" alt="Como Funciona">
+      </div> -->
+      <div class="col-md-6">
+        <ul class="list-group">
+          <li class="list-group-item">
+            <strong>🔍 Encontre:</strong> Escolha entre os melhores profissionais de sua região.
+          </li>
+          <img src="/images/mapa.png" class="img-fluid" alt="Mapa com uma lupa">
+          <li class="list-group-item">
+            <strong>📅 Agende:</strong> Reserve a data perfeita para o seu evento.
+          </li>
+          <img src="/images/calendario.png" class="img-fluid" alt="calendario">
+          <li class="list-group-item">
+            <strong>💳 Pague:</strong> Realize o pagamento com segurança pela plataforma.
+          </li>
+          <img src="/images/pagamento.png" class="img-fluid" alt="pagamento">
+          <li class="list-group-item">
+            <strong>🌟 Avalie:</strong> Compartilhe sua experiência e ajude outros clientes.
+          </li>
+          <img src="/images/avaliacao.png" class="img-fluid" alt="Avaliando o serviço">
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contato -->
+  <div class="mt-5 text-center">
+    <h3 class="text-primary">📞 Entre em Contato</h3>
+    <p class="lead">Tem dúvidas? Fale conosco:</p>
+    <p><strong>WhatsApp:</strong> <a href="https://wa.me/5541985028480" target="_blank">+55 41 98502-8480</a></p>
+    <p><strong>Email:</strong> <a href="mailto:contato@chamachurras.com">contato@chamachurras.com</a></p>
+    <a href="/dashboard" class="btn btn-secondary mt-3">Voltar para Página Inicial</a>
   </div>
 </div>
 

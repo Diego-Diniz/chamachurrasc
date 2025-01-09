@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
 const enviarEmail = require('../services/emailService');
 const resetPasswordTemplate = require('../templates/resetPasswordTemplate');
-
+const emailTemplate = require('../templates/emailTemplate');
 
 // Registro de novo usuário
 exports.register = async (req, res) => {
@@ -29,18 +29,16 @@ exports.register = async (req, res) => {
             confirmation_code: confirmationCode
         });
 
-        // Enviar o e-mail com o código
-        await enviarEmail(
-            email,
-            'Confirme seu cadastro - ChamaChurras',
-            name,
-            confirmationCode
-        );
+        // Gera o conteúdo do e-mail usando o template
+        const emailContent = emailTemplate(name, confirmationCode);
+
+        // Envia o e-mail de confirmação
+        await enviarEmail(email, 'Confirme seu cadastro - ChamaChurras', emailContent);
 
         res.render('confirmEmail', {
             message: 'Cadastro realizado. Verifique seu e-mail!',
             user: newUser,
-            error: null // Adicione a variável error como null
+            error: null
         });
     } catch (error) {
         console.error(error);
@@ -51,7 +49,7 @@ exports.register = async (req, res) => {
 
 // Login de usuário
 exports.showLoginPage = (req, res) => {
-    res.render('login', { error: null });
+    res.render('login', { error: null, message: null });
 };
 
 exports.login = async (req, res) => {
@@ -61,20 +59,20 @@ exports.login = async (req, res) => {
         const user = await User.findOne({ where: { email } });
 
         if (!user) {
-            return res.render('login', { error: 'Usuário não encontrado' });
+            return res.render('login', { error: 'Usuário não encontrado', message: null  });
         }
 
         // Verifica se o e-mail foi confirmado
         if (!user.confirmed) {
             return res.render('login', {
-                error: 'E-mail não confirmado. Verifique sua caixa de entrada.',
+                error: 'E-mail não confirmado. Verifique sua caixa de entrada.', message: null 
             });
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
-            return res.render('login', { error: 'Senha incorreta' });
+            return res.render('login', { error: 'Senha incorreta', message: null  });
         }
 
         const token = jwt.sign({ id: user.id, user_type: user.user_type }, process.env.JWT_SECRET, {
@@ -85,7 +83,7 @@ exports.login = async (req, res) => {
         res.redirect('/dashboard');  // Redireciona para o painel após login
     } catch (error) {
         console.error(error);
-        res.render('login', { error: 'Erro ao fazer login' });
+        res.render('login', { error: 'Erro ao fazer login' , message: null });
     }
 };
 
@@ -242,7 +240,8 @@ exports.confirmEmail = async (req, res) => {
 
         await user.update({ confirmed: true, confirmation_code: null });
 
-        res.render('login', { error: 'E-mail confirmado com sucesso! Faça login para continuar.' });
+        // Passa a mensagem de sucesso na variável `message`
+        res.render('login', { message: 'E-mail confirmado com sucesso! Faça login para continuar.', error: null });
     } catch (error) {
         console.error(error);
         res.render('confirmEmail', { user: { email }, error: 'Erro ao confirmar e-mail.' });
