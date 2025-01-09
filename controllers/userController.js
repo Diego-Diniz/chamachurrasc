@@ -123,7 +123,7 @@ exports.forgotPassword = async (req, res) => {
         const user = await User.findOne({ where: { email } });
 
         if (!user) {
-            return res.render('forgotPassword', { error: 'Usuário não encontrado' });
+            return res.render('forgotPassword', { error: 'Usuário não encontrado', message: null });
         }
 
         const resetToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -136,33 +136,38 @@ exports.forgotPassword = async (req, res) => {
         const resetLink = `${process.env.APP_URL}/reset-password?token=${resetToken}`;
         const emailContent = resetPasswordTemplate(user.name, resetLink);
 
-        await enviarEmail(
-            email,
-            'Redefinição de Senha - ChamaChurras',
-            emailContent
-        );
+        await enviarEmail(email, 'Redefinição de Senha - ChamaChurras', emailContent);
 
-        res.render('forgotPassword', { error: null, message: 'Verifique seu email para redefinir a senha' });
+        res.render('forgotPassword', { 
+            error: null, 
+            message: 'E-mail enviado com sucesso! Verifique sua caixa de entrada.' 
+        });
     } catch (error) {
         console.error(error);
-        res.render('forgotPassword', { error: 'Erro ao processar solicitação' });
+        res.render('forgotPassword', { 
+            error: 'Erro ao processar a solicitação.', 
+            message: null 
+        });
     }
 };
-
 // Redefinição de senha
 exports.resetPassword = async (req, res) => {
     const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+        return res.render('resetPassword', { error: 'Token ou nova senha não fornecidos', token });
+    }
 
     try {
         const user = await User.findOne({
             where: {
                 reset_token: token,
-                reset_token_expiry: { [Op.gt]: new Date() },
+                reset_token_expiry: { [Op.gt]: new Date() }, // Token ainda válido
             },
         });
 
         if (!user) {
-            return res.status(400).json({ error: 'Token inválido ou expirado' });
+            return res.render('resetPassword', { error: 'Token inválido ou expirado', token: null });
         }
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
@@ -173,10 +178,10 @@ exports.resetPassword = async (req, res) => {
             reset_token_expiry: null,
         });
 
-        res.status(200).json({ message: 'Senha redefinida com sucesso!' });
+        res.render('login', { error: null, message: 'Senha redefinida com sucesso! Faça login.' });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Erro ao redefinir senha' });
+        res.render('resetPassword', { error: 'Erro ao redefinir senha', token });
     }
 };
 
