@@ -21,6 +21,11 @@ router.get('/forgot-password', (req, res) => {
 });
 router.post('/reset-password', userController.resetPassword); // Redefinir senha com token
 
+router.get('/reset-password', (req, res) => {
+    const { token } = req.query;
+    res.render('resetPassword', { token, error: null }); // Renderiza a página com o token
+});
+
 router.post('/auth/confirm-email', userController.confirmEmail);
 
 // Rotas Protegidas

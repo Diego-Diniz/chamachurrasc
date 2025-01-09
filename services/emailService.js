@@ -1,12 +1,8 @@
 const sgMail = require('@sendgrid/mail');
-const emailTemplate = require('../templates/emailTemplate');
-
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Função genérica para envio de e-mails com template
-const enviarEmail = async (to, subject, name, code) => {
-    const htmlContent = emailTemplate(name, code);
-
+const enviarEmail = async (to, subject, htmlContent) => {
     const msg = {
         to,
         from: process.env.EMAIL_FROM,

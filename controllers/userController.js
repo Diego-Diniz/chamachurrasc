@@ -3,8 +3,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { Op } = require('sequelize');
 const enviarEmail = require('../services/emailService');
+const resetPasswordTemplate = require('../templates/resetPasswordTemplate');
 
-// Registro de novo usuário
+
 // Registro de novo usuário
 exports.register = async (req, res) => {
     const { name, email, password, phone, zip_code, profile_picture } = req.body;
@@ -132,7 +133,16 @@ exports.forgotPassword = async (req, res) => {
             reset_token_expiry: new Date(Date.now() + 3600000), // 1 hora de validade
         });
 
-        res.render('forgotPassword', { error: 'Um link de redefinição foi enviado ao seu e-mail.' });
+        const resetLink = `${process.env.APP_URL}/reset-password?token=${resetToken}`;
+        const emailContent = resetPasswordTemplate(user.name, resetLink);
+
+        await enviarEmail(
+            email,
+            'Redefinição de Senha - ChamaChurras',
+            emailContent
+        );
+
+        res.render('forgotPassword', { error: null, message: 'Verifique seu email para redefinir a senha' });
     } catch (error) {
         console.error(error);
         res.render('forgotPassword', { error: 'Erro ao processar solicitação' });
