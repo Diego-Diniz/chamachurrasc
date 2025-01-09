@@ -17,7 +17,7 @@ router.post('/login', userController.login);
 
 router.post('/forgot-password', userController.forgotPassword); // Solicitar redefinição de senha
 router.get('/forgot-password', (req, res) => {
-    res.render('forgotPassword', { error: null });
+    res.render('forgotPassword', { error: null, message: null });
 });
 router.post('/reset-password', userController.resetPassword); // Redefinir senha com token
 

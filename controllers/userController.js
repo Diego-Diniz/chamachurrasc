@@ -140,19 +140,20 @@ exports.forgotPassword = async (req, res) => {
         await enviarEmail(email, 'Redefinição de Senha - ChamaChurras', emailContent);
 
         // Envia `message` caso o e-mail seja enviado com sucesso
-        res.render('forgotPassword', { 
+        return res.render('forgotPassword', { 
             error: null, 
             message: 'E-mail enviado com sucesso! Verifique sua caixa de entrada.' 
         });
     } catch (error) {
         console.error(error);
         // Envia `error` caso ocorra um problema
-        res.render('forgotPassword', { 
+        return res.render('forgotPassword', { 
             error: 'Erro ao processar a solicitação.', 
             message: null 
         });
     }
 };
+
 // Redefinição de senha
 exports.resetPassword = async (req, res) => {
     const { token, newPassword } = req.body;
