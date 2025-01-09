@@ -123,6 +123,7 @@ exports.forgotPassword = async (req, res) => {
         const user = await User.findOne({ where: { email } });
 
         if (!user) {
+            // Envia `error` caso o usuário não seja encontrado
             return res.render('forgotPassword', { error: 'Usuário não encontrado', message: null });
         }
 
@@ -138,12 +139,14 @@ exports.forgotPassword = async (req, res) => {
 
         await enviarEmail(email, 'Redefinição de Senha - ChamaChurras', emailContent);
 
+        // Envia `message` caso o e-mail seja enviado com sucesso
         res.render('forgotPassword', { 
             error: null, 
             message: 'E-mail enviado com sucesso! Verifique sua caixa de entrada.' 
         });
     } catch (error) {
         console.error(error);
+        // Envia `error` caso ocorra um problema
         res.render('forgotPassword', { 
             error: 'Erro ao processar a solicitação.', 
             message: null 
