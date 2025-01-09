@@ -23,7 +23,9 @@ router.post('/reset-password', userController.resetPassword); // Redefinir senha
 
 router.get('/reset-password', (req, res) => {
     const { token } = req.query;
-    res.render('resetPassword', { token, error: null }); // Renderiza a página com o token
+
+    // Renderiza a página de redefinição de senha com valores padrão
+    res.render('resetPassword', { token, error: null, message: null });
 });
 
 router.post('/auth/confirm-email', userController.confirmEmail);
