@@ -4,14 +4,12 @@ const User = require('../models/User');
 
 // Rota para processar o código de confirmação (POST)
 router.post('/confirm-email', async (req, res) => {
-    console.log('Dados recebidos:', req.body);  // Verifica o conteúdo do req.body
     const { email, code } = req.body;
 
     try {
         const user = await User.findOne({ where: { email } });
 
         if (!user) {
-            console.log('Usuário não encontrado.');
             return res.render('confirmEmail', {
                 error: 'Usuário não encontrado!',
                 user: { email }
@@ -19,15 +17,15 @@ router.post('/confirm-email', async (req, res) => {
         }
 
         const expectedCode = user.confirmation_code;
-        console.log('Código esperado:', expectedCode);
-        console.log('Código digitado:', code);
 
+        // Adicione o código aqui
         if (code == expectedCode) {
-            user.confirmed = true;
-            await user.save();
-            
+            user.confirmed = true; // Atualiza o campo confirmado
+            await user.save();     // Salva no banco de dados
+
+            console.log('Status confirmado no banco:', user.confirmed); // Verifica o estado
             console.log('Cadastro confirmado! Redirecionando...');
-            return res.redirect('/auth/confirmSuccess');
+            return res.redirect('/auth/confirmSuccess'); // Redireciona para a página de sucesso
         } else {
             console.log('Código inválido.');
             return res.render('confirmEmail', {
@@ -65,11 +63,14 @@ router.get('/confirmar', async (req, res) => {
         }
 
         // Confirma o usuário
-        user.confirmed = true;
-        user.confirmation_code = null;  // Opcional: Remove o código após a confirmação
-        await user.save();
+        user.confirmed = true;  // Atualiza o campo para true
+        user.confirmation_code = null;  // Limpa o código após confirmação
+        await user.save();  // Salva no banco
 
-        res.redirect('/auth/confirmSuccess');  // Redireciona para a página de sucesso
+        console.log('Usuário confirmado com sucesso.');
+
+        // Redireciona para a página de sucesso
+        res.redirect('/auth/confirmSuccess');
     } catch (error) {
         console.error('Erro ao confirmar e-mail:', error);
         res.status(500).send('Erro interno ao confirmar e-mail.');

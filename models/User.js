@@ -73,6 +73,12 @@ const User = sequelize.define('User', {
         allowNull: false,
         defaultValue: 'ativo',
     },
+    confirmed: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,  // Usuário começa como não confirmado
+    },
+    
 }, {
     tableName: 'Users', // Nome da tabela no banco de dados
     timestamps: false,  // Desativa as colunas automáticas createdAt e updatedAt do Sequelize

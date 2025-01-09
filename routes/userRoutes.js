@@ -21,6 +21,8 @@ router.get('/forgot-password', (req, res) => {
 });
 router.post('/reset-password', userController.resetPassword); // Redefinir senha com token
 
+router.post('/auth/confirm-email', userController.confirmEmail);
+
 // Rotas Protegidas
 router.use(isAuthenticated); // Aplica o middleware de autenticação nas rotas abaixo
 

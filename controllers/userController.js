@@ -63,6 +63,13 @@ exports.login = async (req, res) => {
             return res.render('login', { error: 'Usuário não encontrado' });
         }
 
+        // Verifica se o e-mail foi confirmado
+        if (!user.confirmed) {
+            return res.render('login', {
+                error: 'E-mail não confirmado. Verifique sua caixa de entrada.',
+            });
+        }
+
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
@@ -74,7 +81,7 @@ exports.login = async (req, res) => {
         });
 
         res.cookie('token', token, { httpOnly: true });
-        res.redirect('/dashboard'); // Redireciona após login bem-sucedido
+        res.redirect('/dashboard');  // Redireciona para o painel após login
     } catch (error) {
         console.error(error);
         res.render('login', { error: 'Erro ao fazer login' });
@@ -198,5 +205,27 @@ exports.deleteUser = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Erro ao deletar usuário' });
+    }
+};
+
+exports.confirmEmail = async (req, res) => {
+    const { email, code } = req.body;
+
+    try {
+        const user = await User.findOne({ where: { email, confirmation_code: code } });
+
+        if (!user) {
+            return res.render('confirmEmail', {
+                user: { email }, 
+                error: 'Código de confirmação inválido. Verifique e tente novamente.'
+            });
+        }
+
+        await user.update({ confirmed: true, confirmation_code: null });
+
+        res.render('login', { error: 'E-mail confirmado com sucesso! Faça login para continuar.' });
+    } catch (error) {
+        console.error(error);
+        res.render('confirmEmail', { user: { email }, error: 'Erro ao confirmar e-mail.' });
     }
 };
