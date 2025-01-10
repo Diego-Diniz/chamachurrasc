@@ -1,0 +1,99 @@
+<%- include('partials/head') %>
+<%- include('partials/header', { title: 'Cadastro de assador no ChamaChurras' }) %>
+
+<div class="container mt-5">
+  <h1 class="text-center">Cadastro de assador no ChamaChurras</h1>
+
+  <% if (error) { %>
+    <div class="alert alert-danger text-center">
+      <%= error %>
+    </div>
+  <% } %>
+
+  <% if (message) { %>
+    <div class="alert alert-success text-center">
+      <%= message %>
+    </div>
+  <% } %>
+
+  <form action="/register-provider" method="POST" class="mt-4">
+    <div class="mb-3">
+      <label for="cep" class="form-label">Seu CEP</label>
+      <input type="text" class="form-control" id="cep" name="location" placeholder="Digite seu CEP" required>
+      <div id="cepError" class="text-danger mt-2" style="display: none;">CEP inválido! Por favor, tente novamente.</div>
+    </div>
+    
+    <!-- Campos ocultos -->
+    <input type="hidden" id="latitude" name="latitude">
+    <input type="hidden" id="longitude" name="longitude">
+
+    <div class="mb-3">
+        <label for="specialty" class="form-label">Especialidades e serviços oferecidos</label>
+        <input type="text" placeholder="Exemplo: Churrasco tradicional, costela fogo de chão, carnes nobres, espetinhos variados, acompanhamentos (arroz, farofa, vinagrete), opções vegetarianas." class="form-control" id="specialty" name="specialty">
+      </div>
+    <div class="mb-3">
+      <label for="availableDates" class="form-label">Datas Disponíveis</label>
+      <textarea class="form-control" id="availableDates" name="availableDates"></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="price" class="form-label">Preço</label>
+      <input type="text" class="form-control" id="price" name="price">
+    </div>
+    <button type="submit" class="btn btn-primary">Cadastrar</button>
+  </form>
+</div>
+
+<%- include('partials/footer') %>
+
+<!-- Importar a API do Google Maps -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDx5UGxwAeud6SvxKUZvqOuuZ3Z-Yj6Ao8&libraries=places"></script>
+
+<script>
+  // Formatar o campo CEP no formato 00000-000
+  document.getElementById('cep').addEventListener('input', function (event) {
+    const cepInput = event.target;
+    let cepValue = cepInput.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+
+    // Limita o CEP a 8 dígitos
+    if (cepValue.length > 8) {
+      cepValue = cepValue.substring(0, 8);
+    }
+
+    // Formata no padrão 00000-000
+    if (cepValue.length > 5) {
+      cepValue = `${cepValue.slice(0, 5)}-${cepValue.slice(5)}`;
+    }
+
+    cepInput.value = cepValue; // Atualiza o campo com a formatação
+  });
+
+  // Função para buscar coordenadas usando a API do Google Maps
+  function getCoordinates(cep) {
+    const geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode({ address: cep }, function (results, status) {
+      if (status === google.maps.GeocoderStatus.OK) {
+        const location = results[0].geometry.location;
+        console.log("Latitude:", location.lat());
+        console.log("Longitude:", location.lng());
+
+        document.getElementById("latitude").value = location.lat();
+        document.getElementById("longitude").value = location.lng();
+        document.getElementById("cepError").style.display = "none"; // Oculta o erro
+      } else {
+        console.error("Geocoding falhou:", status);
+        document.getElementById("cepError").style.display = "block"; // Mostra o erro
+      }
+    });
+  }
+
+  // Validar o CEP ao perder o foco
+  document.getElementById("cep").addEventListener("blur", function () {
+    const cep = this.value.replace(/\D/g, ""); // Remove caracteres não numéricos
+    if (cep.length !== 8) {
+      document.getElementById("cepError").style.display = "block";
+      return;
+    }
+    getCoordinates(cep);
+  });
+</script>
